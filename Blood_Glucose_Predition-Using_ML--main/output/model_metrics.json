@@ -1,0 +1,37 @@
+{
+    "target": "Blood Sugar Levels Hike (%)",
+    "model": "GradientBoostingRegressor",
+    "total_rows": 220,
+    "training_rows": 176,
+    "testing_rows": 44,
+    "features": [
+        "Glycemic Index",
+        "Carbohydrates",
+        "Protein",
+        "Fiber",
+        "Type of Diabetes",
+        "Age",
+        "Weight",
+        "Skin Thickness"
+    ],
+    "test_metrics": {
+        "MAE": 0.7841227536259293,
+        "MSE": 0.9156169223700942,
+        "RMSE": 0.9568787396374183,
+        "R2": 0.9668362731902396
+    },
+    "baseline_metrics": {
+        "MAE": 4.478305785123966,
+        "MSE": 28.774405991735538,
+        "RMSE": 5.364178035052112,
+        "R2": -0.04221155824961187
+    },
+    "cross_validation": {
+        "folds": 5,
+        "mean_mae": 1.1764886534038195,
+        "mean_rmse": 1.6737694677718136,
+        "mean_r2": 0.8653571794755986
+    },
+    "sklearn_version": "1.5.0",
+    "note": "Research prototype only; clinical validity has not been established."
+}

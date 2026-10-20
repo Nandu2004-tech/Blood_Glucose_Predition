@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Explore educational articles about diabetes, blood glucose management, nutrition, and healthy living.">
+    <title>Articles | Diabetic Care</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #087f8c;
+            --primary-dark: #07515b;
+            --accent: #18b6a4;
+            --background: #f2f8fa;
+            --text: #203447;
+            --muted: #667887;
+            --white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(7, 59, 76, 0.97);
+            backdrop-filter: blur(12px);
+            color: var(--white);
+            box-shadow: 0 4px 20px rgba(7, 59, 76, 0.12);
+        }
+
+        .navbar {
+            max-width: 1250px;
+            margin: auto;
+            min-height: 74px;
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            color: var(--white);
+            text-decoration: none;
+            font-size: 21px;
+            font-weight: 750;
+        }
+
+        .brand-icon {
+            width: 42px;
+            height: 42px;
+            display: grid;
+            place-items: center;
+            background: var(--accent);
+            border-radius: 13px;
+            font-size: 20px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .nav-links a {
+            color: #e8f6f7;
+            text-decoration: none;
+            padding: 10px 14px;
+            border-radius: 9px;
+            font-size: 14px;
+            font-weight: 600;
+            transition: 0.25s ease;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            background: rgba(24, 182, 164, 0.2);
+            color: #75f1df;
+        }
+
+        .hero {
+            position: relative;
+            padding: 76px 20px 70px;
+            text-align: center;
+            color: white;
+            background:
+                linear-gradient(115deg, rgba(5, 54, 68, 0.95), rgba(8, 127, 140, 0.83)),
+                url("../img/bg1.avif") center/cover no-repeat;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: auto;
+        }
+
+        .eyebrow {
+            display: inline-block;
+            padding: 7px 14px;
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.1);
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 18px;
+        }
+
+        .hero h1 {
+            font-size: clamp(32px, 5vw, 52px);
+            line-height: 1.15;
+            margin-bottom: 18px;
+        }
+
+        .hero h1 span {
+            color: #72f0dc;
+        }
+
+        .hero p {
+            max-width: 650px;
+            margin: 0 auto;
+            color: #e0f1f4;
+            font-size: 17px;
+        }
+
+        .main-container {
+            max-width: 1250px;
+            padding: 55px 24px 70px;
+            margin: auto;
+        }
+
+        .section-heading {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .section-heading h2 {
+            color: var(--primary-dark);
+            font-size: clamp(25px, 3vw, 34px);
+            margin-bottom: 10px;
+        }
+
+        .section-heading p {
+            color: var(--muted);
+            max-width: 650px;
+            margin: auto;
+        }
+
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 28px;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: min(100%, 390px);
+            padding: 12px 16px;
+            background: white;
+            border: 1px solid #dce8ed;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(7, 59, 76, 0.04);
+        }
+
+        .search-box i {
+            color: var(--primary);
+        }
+
+        .search-box input {
+            border: none;
+            outline: none;
+            width: 100%;
+            font: inherit;
+            color: var(--text);
+            background: transparent;
+        }
+
+        .article-count {
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .article-list {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 25px;
+        }
+
+        .article-card {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            overflow: hidden;
+            background: var(--white);
+            border: 1px solid #e3edf0;
+            border-radius: 17px;
+            box-shadow: 0 8px 25px rgba(7, 59, 76, 0.055);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            animation: fadeUp 0.45s ease both;
+        }
+
+        .article-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 16px 35px rgba(7, 59, 76, 0.12);
+        }
+
+        .article-card img {
+            display: block;
+            width: 100%;
+            height: 215px;
+            object-fit: cover;
+            background: #e4f1f3;
+        }
+
+        .article-content {
+            display: flex;
+            flex: 1;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 23px;
+        }
+
+        .article-category {
+            display: inline-block;
+            padding: 5px 10px;
+            background: #e5f7f4;
+            color: var(--primary);
+            border-radius: 50px;
+            font-size: 11px;
+            font-weight: 750;
+            text-transform: uppercase;
+            letter-spacing: 0.7px;
+            margin-bottom: 13px;
+        }
+
+        .article-card h2 {
+            font-size: 20px;
+            line-height: 1.4;
+            color: var(--primary-dark);
+            margin-bottom: 12px;
+        }
+
+        .article-card p {
+            color: var(--muted);
+            font-size: 14px;
+            margin-bottom: 20px;
+            overflow-wrap: anywhere;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+            margin-top: auto;
+            padding: 11px 17px;
+            border: none;
+            border-radius: 9px;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            font: inherit;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s ease, transform 0.2s ease;
+        }
+
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        .empty-state {
+            display: none;
+            padding: 50px 20px;
+            text-align: center;
+            color: var(--muted);
+            background: white;
+            border-radius: 15px;
+            border: 1px dashed #cbdde3;
+        }
+
+        .empty-state i {
+            display: block;
+            font-size: 35px;
+            color: var(--primary);
+            margin-bottom: 12px;
+        }
+
+        .empty-state h3 {
+            color: var(--primary-dark);
+            margin-bottom: 7px;
+        }
+
+        .notice {
+            margin-top: 35px;
+            padding: 17px 20px;
+            background: #fff8e9;
+            border-left: 4px solid #e4aa40;
+            border-radius: 9px;
+            color: #70572a;
+            font-size: 13px;
+        }
+
+        footer {
+            background: #073b4c;
+            color: #d7e8ec;
+            padding: 28px 20px;
+            text-align: center;
+        }
+
+        .footer-inner {
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        .footer-inner p {
+            font-size: 13px;
+        }
+
+        .footer-inner .footer-brand {
+            color: white;
+            font-weight: 700;
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 950px) {
+            .article-list {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .navbar {
+                padding: 12px 18px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .navbar {
+                flex-direction: column;
+                gap: 8px;
+                padding: 12px;
+            }
+
+            .brand {
+                font-size: 19px;
+            }
+
+            .nav-links {
+                justify-content: center;
+                gap: 4px;
+            }
+
+            .nav-links a {
+                padding: 8px 10px;
+                font-size: 13px;
+            }
+
+            .hero {
+                padding: 52px 18px;
+            }
+
+            .hero p {
+                font-size: 15px;
+            }
+
+            .main-container {
+                padding: 38px 16px 50px;
+            }
+
+            .article-list {
+                grid-template-columns: 1fr;
+            }
+
+            .article-card img {
+                height: 220px;
+            }
+
+            .toolbar {
+                align-items: stretch;
+            }
+
+            .search-box {
+                width: 100%;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                scroll-behavior: auto !important;
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav class="navbar" aria-label="Main navigation">
+            <a class="brand" href="homepage.html">
+                <span class="brand-icon"><i class="fa-solid fa-heart-pulse"></i></span>
+                <span>Diabetic Care</span>
+            </a>
+
+            <div class="nav-links">
+                <a href="homepage.html"><i class="fa-solid fa-house"></i> Home</a>
+                <a href="articles.html" class="active" aria-current="page">
+                    <i class="fa-solid fa-book-open"></i> Articles
+                </a>
+                <a href="diet.html"><i class="fa-solid fa-apple-whole"></i> Diet</a>
+                <a href="about.html"><i class="fa-solid fa-circle-info"></i> About</a>
+            </div>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <span class="eyebrow">Knowledge for healthier living</span>
+            <h1>Learn More. Live <span>Healthier.</span></h1>
+            <p>
+                Explore educational resources about diabetes, blood glucose,
+                nutrition, and healthy everyday habits.
+            </p>
+        </div>
+    </section>
+
+    <main class="main-container">
+        <div class="section-heading">
+            <h2>Health & Wellness Articles</h2>
+            <p>
+                Build your understanding of diabetes with accessible educational
+                information and practical wellness topics.
+            </p>
+        </div>
+
+        <div class="toolbar">
+            <label class="search-box" for="article-search">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input
+                    type="search"
+                    id="article-search"
+                    placeholder="Search articles..."
+                    aria-label="Search articles"
+                >
+            </label>
+            <p class="article-count" id="article-count" aria-live="polite">
+                Loading articles...
+            </p>
+        </div>
+
+        <section
+            class="article-list"
+            id="article-list"
+            aria-label="Articles"
+        >
+            <!-- Articles are loaded from ../data/articles.js -->
+        </section>
+
+        <div class="empty-state" id="empty-state">
+            <i class="fa-regular fa-folder-open"></i>
+            <h3>No articles found</h3>
+            <p>Try a different search term.</p>
+        </div>
+
+        <div class="notice">
+            <strong><i class="fa-solid fa-circle-info"></i> Educational note:</strong>
+            These articles are for general educational purposes only and are not
+            a substitute for advice from a qualified healthcare professional.
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-inner">
+            <p class="footer-brand">
+                <i class="fa-solid fa-heart-pulse"></i> Diabetic Care
+            </p>
+            <p>&copy; 2026 Diabetic Management System. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="../data/articles.js"></script>
+
+    <script>
+        const articleList = document.getElementById("article-list");
+        const searchInput = document.getElementById("article-search");
+        const articleCount = document.getElementById("article-count");
+        const emptyState = document.getElementById("empty-state");
+
+        function getArticleData() {
+            // Supports common variable names used in articles.js.
+            const candidates = [
+                window.articles,
+                window.articlesData,
+                window.articleData,
+                window.articleList,
+                window.blogArticles
+            ];
+
+            return candidates.find(Array.isArray) || [];
+        }
+
+        function makeElement(tag, className, text) {
+            const element = document.createElement(tag);
+            if (className) element.className = className;
+            if (text !== undefined && text !== null) {
+                element.textContent = String(text);
+            }
+            return element;
+        }
+
+        function renderArticles() {
+            const articles = getArticleData();
+            const query = searchInput.value.trim().toLowerCase();
+
+            articleList.replaceChildren();
+
+            const filteredArticles = articles.filter(article => {
+                const title = article.title || article.name || "";
+                const description =
+                    article.description || article.summary || article.content || "";
+                const category = article.category || article.type || "";
+
+                return `${title} ${description} ${category}`
+                    .toLowerCase()
+                    .includes(query);
+            });
+
+            filteredArticles.forEach(article => {
+                const title = article.title || article.name || "Health Article";
+                const description =
+                    article.description || article.summary || article.content || "";
+                const category = article.category || article.type || "Health & Wellness";
+
+                const card = makeElement("article", "article-card");
+
+                const imageUrl = article.image || article.img || article.imageUrl;
+
+                if (imageUrl) {
+                    const image = document.createElement("img");
+                    image.src = imageUrl;
+                    image.alt = title;
+                    image.loading = "lazy";
+                    image.addEventListener("error", () => image.remove());
+                    card.appendChild(image);
+                }
+
+                const content = makeElement("div", "article-content");
+                content.appendChild(makeElement("span", "article-category", category));
+                content.appendChild(makeElement("h2", "", title));
+                content.appendChild(makeElement("p", "", description));
+
+                const link = article.url || article.link || article.href;
+
+                if (link) {
+                    const button = makeElement("a", "btn");
+                    button.href = link;
+                    button.appendChild(document.createTextNode("Read Article "));
+                    const icon = document.createElement("i");
+                    icon.className = "fa-solid fa-arrow-right";
+                    icon.setAttribute("aria-hidden", "true");
+                    button.appendChild(icon);
+                    content.appendChild(button);
+                } else {
+                    const button = makeElement("button", "btn", "Read Article");
+                    button.type = "button";
+                    button.addEventListener("click", () => {
+                        const fullText = article.content || description;
+                        if (fullText) {
+                            const detail = makeElement("div", "article-content");
+                            detail.appendChild(makeElement("h2", "", title));
+                            detail.appendChild(makeElement("p", "", fullText));
+                            const existing = card.querySelector(".article-expanded");
+                            if (existing) {
+                                existing.remove();
+                                button.textContent = "Read Article";
+                            } else {
+                                detail.classList.add("article-expanded");
+                                card.appendChild(detail);
+                                button.textContent = "Close Article";
+                            }
+                        }
+                    });
+                    content.appendChild(button);
+                }
+
+                card.appendChild(content);
+                articleList.appendChild(card);
+            });
+
+            articleCount.textContent =
+                `${filteredArticles.length} article${filteredArticles.length === 1 ? "" : "s"} found`;
+
+            emptyState.style.display =
+                filteredArticles.length === 0 ? "block" : "none";
+        }
+
+        searchInput.addEventListener("input", renderArticles);
+        renderArticles();
+    </script>
+</body>
+</html>

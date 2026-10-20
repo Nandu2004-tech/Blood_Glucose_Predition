@@ -1,0 +1,553 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Diet Plans | Dr. Diabetic</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f8fb;
+            color: #243447;
+            line-height: 1.6;
+        }
+
+        header {
+            background: #087f8c;
+            color: white;
+            padding: 18px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .logo {
+            color: white;
+            font-size: 25px;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 18px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        .hero {
+            padding: 60px 20px;
+            text-align: center;
+            color: white;
+            background:
+                linear-gradient(
+                    rgba(0, 70, 80, 0.85),
+                    rgba(0, 70, 80, 0.85)
+                ),
+                url("{{ url_for('images', filename='bg1.avif') }}")
+                center/cover no-repeat;
+        }
+
+        .hero h1 {
+            font-size: clamp(28px, 5vw, 42px);
+            margin-bottom: 12px;
+        }
+
+        .hero p {
+            max-width: 700px;
+            margin: auto;
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 35px auto;
+            padding: 0 20px;
+        }
+
+        .notice {
+            background: #fff8df;
+            border-left: 5px solid #e3ad28;
+            padding: 15px 18px;
+            margin-bottom: 28px;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .search-section {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .search-section h2 {
+            color: #087f8c;
+            margin-bottom: 8px;
+        }
+
+        #diet-search {
+            width: 100%;
+            max-width: 600px;
+            margin-top: 16px;
+            padding: 14px 16px;
+            border: 1px solid #cbd5df;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        #diet-search:focus {
+            outline: 2px solid #087f8c;
+            border-color: #087f8c;
+        }
+
+        #plan-count {
+            margin-top: 12px;
+            color: #526475;
+            font-size: 14px;
+        }
+
+        .diet-plan-list {
+            display: grid;
+            grid-template-columns: repeat(
+                auto-fit,
+                minmax(260px, 1fr)
+            );
+            gap: 22px;
+        }
+
+        .diet-plan-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 18px rgba(25, 50, 70, 0.09);
+            border: 1px solid #e5edf2;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .diet-plan-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(25, 50, 70, 0.14);
+        }
+
+        .diet-plan-card img {
+            width: 100%;
+            height: 190px;
+            object-fit: cover;
+            background: #e8f4f4;
+        }
+
+        .plan-content {
+            padding: 22px;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .plan-category {
+            display: inline-block;
+            align-self: flex-start;
+            background: #dff3f3;
+            color: #087f8c;
+            border-radius: 20px;
+            padding: 5px 12px;
+            margin-bottom: 12px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .plan-content h2 {
+            color: #087f8c;
+            font-size: 20px;
+            line-height: 1.4;
+            margin-bottom: 10px;
+        }
+
+        .plan-content p {
+            color: #526475;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .plan-details {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: auto;
+        }
+
+        .plan-details span {
+            background: #f0f5f8;
+            color: #34495e;
+            padding: 6px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+        }
+
+        .demo-label {
+            color: #795b10;
+            background: #fff8df;
+            padding: 8px;
+            border-radius: 5px;
+            margin-top: 14px;
+            font-size: 12px;
+        }
+
+        .message {
+            text-align: center;
+            background: white;
+            padding: 30px 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            color: #526475;
+        }
+
+        footer {
+            margin-top: 55px;
+            background: #123b46;
+            color: white;
+            text-align: center;
+            padding: 24px 15px;
+            font-size: 14px;
+        }
+
+        @media (max-width: 600px) {
+            header {
+                justify-content: center;
+                text-align: center;
+            }
+
+            nav {
+                justify-content: center;
+                gap: 12px;
+            }
+
+            .hero {
+                padding: 45px 18px;
+            }
+
+            main {
+                padding: 0 14px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <a class="logo" href="{{ url_for('homepage') }}">
+        Dr. Diabetic
+    </a>
+
+    <nav>
+        <a href="{{ url_for('homepage') }}">Home</a>
+        <a href="{{ url_for('prediction') }}">Prediction</a>
+        <a href="{{ url_for('diet') }}">Diet Plans</a>
+        <a href="{{ url_for('articles') }}">Articles</a>
+        <a href="{{ url_for('about') }}">About</a>
+        <a href="{{ url_for('consultation') }}">Consultation</a>
+    </nav>
+</header>
+
+<section class="hero">
+    <h1>Diabetes-Friendly Diet Plans</h1>
+    <p>
+        Explore balanced meal ideas and nutrition information.
+        Choose meals according to your needs with guidance from
+        a qualified healthcare professional.
+    </p>
+</section>
+
+<main>
+    <div class="notice">
+        <strong>Important:</strong>
+        These plans provide general nutrition information and are not
+        individual medical advice. Dietary needs vary by person,
+        medication, and health conditions. Consult a registered
+        dietitian or qualified healthcare professional before making
+        significant dietary changes.
+    </div>
+
+    <section class="search-section">
+        <h2>Explore Diet Plans</h2>
+
+        <p>
+            Search by plan name, category, meal type, or description.
+        </p>
+
+        <input
+            id="diet-search"
+            type="search"
+            placeholder="Search diet plans..."
+            aria-label="Search diet plans"
+            autocomplete="off"
+        >
+
+        <p id="plan-count" aria-live="polite">
+            Loading diet plans...
+        </p>
+    </section>
+
+    <section
+        id="diet-plan-list"
+        class="diet-plan-list"
+        aria-live="polite"
+    ></section>
+
+    <div
+        id="empty-state"
+        class="message"
+        style="display: none;"
+    >
+        No diet plans found. Try another search.
+    </div>
+</main>
+
+<footer>
+    <p>Dr. Diabetic — Diabetes Information and Support</p>
+    <p>For personalized dietary advice, consult a qualified professional.</p>
+</footer>
+
+<!-- Load diet data before running the page renderer. -->
+<script src="{{ url_for('data_files', filename='diet-plans.js') }}"></script>
+
+<script>
+(function () {
+    "use strict";
+
+    const planList = document.getElementById("diet-plan-list");
+    const searchInput = document.getElementById("diet-search");
+    const planCount = document.getElementById("plan-count");
+    const emptyState = document.getElementById("empty-state");
+
+    /*
+     * Testing fallback only.
+     * These are example plans, not personalized medical advice.
+     * Real data from diet-plans.js takes priority.
+     */
+    const demoPlans = [
+        {
+            title: "Balanced Meal Plan",
+            description:
+                "An example of balanced meals featuring vegetables, whole grains, protein, and appropriate portions.",
+            category: "Balanced Nutrition",
+            duration: "Daily example",
+            meals: "Breakfast, lunch and dinner",
+            image: "",
+            demo: true
+        },
+        {
+            title: "High-Fiber Meal Ideas",
+            description:
+                "Example meal ideas featuring beans, vegetables, fruit, and whole grains.",
+            category: "High Fiber",
+            duration: "Daily example",
+            meals: "Fiber-rich food ideas",
+            image: "",
+            demo: true
+        },
+        {
+            title: "Heart-Healthy Meal Ideas",
+            description:
+                "Example meal ideas featuring vegetables, legumes, whole grains, and unsaturated fats.",
+            category: "Heart Healthy",
+            duration: "Daily example",
+            meals: "Balanced food ideas",
+            image: "",
+            demo: true
+        }
+    ];
+
+    function getPlans() {
+        if (
+            Array.isArray(window.dietPlans) &&
+            window.dietPlans.length > 0
+        ) {
+            return {
+                plans: window.dietPlans,
+                isDemo: false
+            };
+        }
+
+        /*
+         * Display sample cards so the layout can be tested if
+         * the external data file is empty or did not load.
+         */
+        return {
+            plans: demoPlans,
+            isDemo: true
+        };
+    }
+
+    function createElement(tag, className, text) {
+        const element = document.createElement(tag);
+
+        if (className) {
+            element.className = className;
+        }
+
+        if (text !== undefined && text !== null) {
+            element.textContent = String(text);
+        }
+
+        return element;
+    }
+
+    function createPlanCard(plan, isDemo) {
+        const card = createElement("article", "diet-plan-card");
+        const content = createElement("div", "plan-content");
+
+        if (plan.image) {
+            const image = document.createElement("img");
+
+            image.src = plan.image;
+            image.alt = plan.title || "Diet plan";
+            image.loading = "lazy";
+
+            image.addEventListener("error", function () {
+                image.remove();
+            }, { once: true });
+
+            card.appendChild(image);
+        }
+
+        content.appendChild(
+            createElement(
+                "span",
+                "plan-category",
+                plan.category || "Nutrition"
+            )
+        );
+
+        content.appendChild(
+            createElement(
+                "h2",
+                "",
+                plan.title || "Diet Plan"
+            )
+        );
+
+        content.appendChild(
+            createElement(
+                "p",
+                "",
+                plan.description || "No description available."
+            )
+        );
+
+        const details = createElement("div", "plan-details");
+
+        if (plan.duration) {
+            details.appendChild(
+                createElement("span", "", plan.duration)
+            );
+        }
+
+        if (plan.meals) {
+            details.appendChild(
+                createElement("span", "", plan.meals)
+            );
+        }
+
+        if (details.childElementCount > 0) {
+            content.appendChild(details);
+        }
+
+        if (isDemo || plan.demo === true) {
+            content.appendChild(
+                createElement(
+                    "p",
+                    "demo-label",
+                    "Example plan — review with a qualified healthcare professional."
+                )
+            );
+        }
+
+        card.appendChild(content);
+
+        return card;
+    }
+
+    function renderDietPlans() {
+        const result = getPlans();
+        const plans = result.plans;
+        const isDemo = result.isDemo;
+        const query = searchInput.value.trim().toLowerCase();
+
+        const filteredPlans = plans.filter(function (plan) {
+            const searchableText = [
+                plan.title,
+                plan.description,
+                plan.category,
+                plan.duration,
+                plan.meals
+            ]
+                .filter(Boolean)
+                .join(" ")
+                .toLowerCase();
+
+            return searchableText.includes(query);
+        });
+
+        planList.replaceChildren();
+
+        filteredPlans.forEach(function (plan) {
+            planList.appendChild(createPlanCard(plan, isDemo));
+        });
+
+        if (isDemo) {
+            planCount.textContent =
+                "Showing example plans — actual diet data was not found.";
+        } else {
+            planCount.textContent =
+                filteredPlans.length +
+                " of " +
+                plans.length +
+                " diet plans found";
+        }
+
+        emptyState.style.display =
+            filteredPlans.length === 0 ? "block" : "none";
+
+        if (filteredPlans.length === 0) {
+            emptyState.textContent = query
+                ? "No matching diet plans. Try another search."
+                : "No diet plans are available.";
+        }
+
+        if (isDemo) {
+            console.warn(
+                "Actual diet data is unavailable. Check the diet-plans.js file, its URL, and its contents."
+            );
+        }
+    }
+
+    searchInput.addEventListener("input", renderDietPlans);
+
+    renderDietPlans();
+})();
+</script>
+
+</body>
+</html>
+```

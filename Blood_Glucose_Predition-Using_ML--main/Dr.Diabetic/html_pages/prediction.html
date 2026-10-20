@@ -1,0 +1,765 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Blood Sugar Prediction | Dr.Diabetic</title>
+
+    <style>
+        :root {
+            --primary: #008f83;
+            --primary-dark: #006b62;
+            --navy: #173b49;
+            --muted: #71818a;
+            --background: #f3f8fa;
+            --border: #dce7eb;
+            --white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            color: var(--navy);
+            background: var(--background);
+            min-height: 100vh;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* Navigation */
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            padding: 18px 7%;
+            background: var(--white);
+            border-bottom: 1px solid var(--border);
+            box-shadow: 0 3px 14px rgba(20, 55, 70, 0.04);
+        }
+
+        .brand {
+            color: var(--primary);
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        .brand span {
+            color: var(--navy);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: #526771;
+            font-size: 0.92rem;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--primary);
+        }
+
+        /* Page heading */
+
+        .page-header {
+            padding: 38px 7% 26px;
+            background:
+                linear-gradient(115deg, rgba(10, 68, 77, 0.94),
+                rgba(0, 143, 131, 0.87)),
+                url('../img/bg1.avif') center/cover no-repeat;
+            color: var(--white);
+        }
+
+        .page-header .eyebrow {
+            display: inline-block;
+            padding: 7px 12px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            font-size: 0.78rem;
+            letter-spacing: 1px;
+            margin-bottom: 14px;
+        }
+
+        .page-header h1 {
+            font-size: clamp(1.8rem, 4vw, 2.6rem);
+            margin-bottom: 12px;
+        }
+
+        .page-header p {
+            max-width: 680px;
+            color: #e0f6f3;
+            line-height: 1.7;
+            font-size: 0.98rem;
+        }
+
+        /* Main layout */
+
+        .main-container {
+            max-width: 1150px;
+            margin: 30px auto 55px;
+            padding: 0 22px;
+        }
+
+        .info-banner {
+            display: flex;
+            align-items: flex-start;
+            gap: 13px;
+            padding: 16px 18px;
+            margin-bottom: 24px;
+            background: #e8f6f3;
+            border: 1px solid #ccebe4;
+            border-radius: 12px;
+            color: #285f59;
+            line-height: 1.6;
+            font-size: 0.9rem;
+        }
+
+        .info-banner .info-icon {
+            font-size: 1.35rem;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(250px, 0.65fr);
+            align-items: start;
+            gap: 25px;
+        }
+
+        .card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 17px;
+            padding: 28px;
+            box-shadow: 0 8px 28px rgba(24, 57, 72, 0.045);
+            min-width: 0;
+        }
+
+        .card-heading {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            margin-bottom: 9px;
+        }
+
+        .card-icon {
+            width: 46px;
+            height: 46px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 13px;
+            background: #e5f6f2;
+            font-size: 1.45rem;
+        }
+
+        .card-heading h2 {
+            font-size: 1.28rem;
+            color: var(--navy);
+        }
+
+        .card-description {
+            margin-bottom: 25px;
+            color: var(--muted);
+            line-height: 1.6;
+            font-size: 0.9rem;
+        }
+
+        /* Form */
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 19px 16px;
+        }
+
+        .form-group {
+            min-width: 0;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #344f5b;
+            font-weight: 700;
+            font-size: 0.88rem;
+        }
+
+        .form-group input,
+        .form-group select {
+            display: block;
+            width: 100%;
+            min-height: 47px;
+            padding: 12px 13px;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            background: #fbfdfe;
+            color: var(--navy);
+            font: inherit;
+            font-size: 0.93rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0, 143, 131, 0.12);
+        }
+
+        .field-hint {
+            display: block;
+            color: var(--muted);
+            font-size: 0.78rem;
+            margin-top: 6px;
+            line-height: 1.5;
+        }
+
+        .submit-btn {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 9px;
+            width: 100%;
+            min-height: 50px;
+            margin-top: 25px;
+            padding: 14px 20px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: var(--white);
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 18px rgba(0, 143, 131, 0.23);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.7;
+            cursor: wait;
+            transform: none;
+        }
+
+        /* Result */
+
+        .result-card {
+            margin-bottom: 24px;
+            padding: 22px;
+            background: #f0faf7;
+            border: 1px solid #cdece3;
+            border-radius: 13px;
+        }
+
+        .result-card h2 {
+            font-size: 1.2rem;
+            margin-bottom: 12px;
+            color: var(--primary-dark);
+        }
+
+        .result-text {
+            line-height: 1.7;
+            overflow-wrap: anywhere;
+        }
+
+        .side-card h3 {
+            font-size: 1.12rem;
+            margin-bottom: 13px;
+        }
+
+        .side-card > p {
+            color: var(--muted);
+            font-size: 0.9rem;
+            line-height: 1.7;
+            margin-bottom: 18px;
+        }
+
+        .tip-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 11px;
+            padding: 15px 0;
+            border-top: 1px solid #edf1f3;
+        }
+
+        .tip-item:first-of-type {
+            border-top: none;
+        }
+
+        .tip-icon {
+            width: 35px;
+            height: 35px;
+            flex-shrink: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 10px;
+            background: #edf7f5;
+        }
+
+        .tip-item strong {
+            display: block;
+            font-size: 0.88rem;
+            margin-bottom: 5px;
+        }
+
+        .tip-item p {
+            color: var(--muted);
+            font-size: 0.82rem;
+            line-height: 1.6;
+        }
+
+        /* Nutrition table */
+
+        .nutrition-section {
+            margin-top: 26px;
+        }
+
+        .nutrition-section h2 {
+            font-size: 1.3rem;
+            margin-bottom: 8px;
+        }
+
+        .nutrition-section .subtitle {
+            color: var(--muted);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 18px;
+        }
+
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+        }
+
+        .nutrition-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 350px;
+            font-size: 0.9rem;
+        }
+
+        .nutrition-table th,
+        .nutrition-table td {
+            padding: 14px 16px;
+            text-align: left;
+            border-bottom: 1px solid #e9eff1;
+        }
+
+        .nutrition-table th {
+            background: #eaf6f3;
+            color: #24564f;
+            font-weight: 700;
+        }
+
+        .nutrition-table tbody tr:nth-child(even) {
+            background: #f8fbfc;
+        }
+
+        .nutrition-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .nutrition-table td:last-child {
+            overflow-wrap: anywhere;
+        }
+
+        .disclaimer {
+            margin-top: 25px;
+            padding: 17px 19px;
+            border: 1px solid #f0dfb4;
+            border-radius: 12px;
+            background: #fff9eb;
+            color: #745c2b;
+            font-size: 0.85rem;
+            line-height: 1.7;
+        }
+
+        footer {
+            padding: 23px 7%;
+            background: #143742;
+            color: #d5e5e8;
+            text-align: center;
+            font-size: 0.85rem;
+            line-height: 1.8;
+        }
+
+        footer a {
+            color: #8de0d3;
+        }
+
+        @media (max-width: 850px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .navbar {
+                padding: 17px 5%;
+            }
+
+            .page-header {
+                padding: 32px 5%;
+            }
+        }
+
+        @media (max-width: 560px) {
+            .navbar {
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .nav-links {
+                gap: 14px;
+            }
+
+            .main-container {
+                margin-top: 20px;
+                padding: 0 13px;
+            }
+
+            .card {
+                padding: 20px 17px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full-width {
+                grid-column: auto;
+            }
+
+            .page-header {
+                padding: 28px 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <a href="homepage.html" class="brand">Dr.<span>Diabetic</span></a>
+
+        <div class="nav-links">
+            <a href="homepage.html">Home</a>
+            <a href="prediction.html" class="active">Prediction</a>
+            <a href="diet.html">Diet Plans</a>
+            <a href="articles.html">Articles</a>
+            <a href="about.html">About</a>
+        </div>
+    </nav>
+
+    <header class="page-header">
+        <span class="eyebrow">AI-ASSISTED HEALTH TOOL</span>
+        <h1>Blood Sugar Prediction</h1>
+        <p>
+            Enter the required information and food item to use the prediction
+            system and view the nutritional details provided by your application.
+        </p>
+    </header>
+
+    <main class="main-container">
+
+        <div class="info-banner">
+            <span class="info-icon" aria-hidden="true">ⓘ</span>
+            <p>
+                <strong>Before you begin:</strong>
+                Enter accurate information and use the units shown. This is an
+                educational prediction tool, not a medical diagnosis or a substitute
+                for a blood glucose measurement or professional medical advice.
+            </p>
+        </div>
+
+        {% if prediction_text %}
+        <section class="result-card" aria-live="polite">
+            <h2>Prediction Result</h2>
+            <p class="result-text">{{ prediction_text }}</p>
+        </section>
+        {% endif %}
+
+        <div class="content-grid">
+
+            <section class="card">
+                <div class="card-heading">
+                    <div class="card-icon" aria-hidden="true">📊</div>
+                    <h2>Enter Your Details</h2>
+                </div>
+
+                <p class="card-description">
+                    Complete the fields below to submit your information
+                    to the prediction service.
+                </p>
+
+                <form action="/predict" method="POST" id="predictionForm">
+
+                    <div class="form-grid">
+
+                        <div class="form-group full-width">
+                            <label for="food_item">Food Item</label>
+                            <input
+                                type="text"
+                                id="food_item"
+                                name="food_item"
+                                placeholder="e.g., Apple, Bread"
+                                autocomplete="off"
+                                required
+                            >
+                            <span class="field-hint">
+                                Enter the food name used by your nutrition dataset.
+                            </span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="age">Age (years)</label>
+                            <input
+                                type="number"
+                                id="age"
+                                name="age"
+                                placeholder="Enter age"
+                                min="1"
+                                max="120"
+                                step="1"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="weight">Weight (kg)</label>
+                            <input
+                                type="number"
+                                id="weight"
+                                name="weight"
+                                placeholder="Enter weight"
+                                min="1"
+                                max="500"
+                                step="any"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="skin_thickness">Skin Thickness (mm)</label>
+                            <input
+                                type="number"
+                                id="skin_thickness"
+                                name="skin_thickness"
+                                placeholder="Enter measured value"
+                                min="0"
+                                max="100"
+                                step="any"
+                                required
+                            >
+                            <span class="field-hint">
+                                Use a measured value if this field is required by your model.
+                            </span>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="diabetes_type">Type of Diabetes</label>
+                            <select
+                                id="diabetes_type"
+                                name="diabetes_type"
+                                required
+                            >
+                                <option value="" disabled selected>
+                                    Select diabetes type
+                                </option>
+                                <option value="Type 1">Type 1</option>
+                                <option value="Type 2">Type 2</option>
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <button type="submit" class="submit-btn" id="submitButton">
+                        <span>Run Prediction</span>
+                        <span aria-hidden="true">→</span>
+                    </button>
+
+                </form>
+            </section>
+
+            <aside class="card side-card">
+                {% if nutrition_details %}
+                <h3>Nutrition Overview</h3>
+                <p>
+                    The nutritional values returned by the application are
+                    displayed in the table below.
+                </p>
+                {% else %}
+                <h3>About This Tool</h3>
+                <p>
+                    Submit the form to request a result from your configured
+                    Flask backend.
+                </p>
+                {% endif %}
+
+                <div class="tip-item">
+                    <div class="tip-icon" aria-hidden="true">🍎</div>
+                    <div>
+                        <strong>Food Information</strong>
+                        <p>
+                            Nutritional values depend on the food records
+                            available in your dataset.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="tip-item">
+                    <div class="tip-icon" aria-hidden="true">🧪</div>
+                    <div>
+                        <strong>Measured Glucose</strong>
+                        <p>
+                            A model prediction is not the same as a glucose
+                            reading from a validated meter or laboratory test.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="tip-item">
+                    <div class="tip-icon" aria-hidden="true">🔒</div>
+                    <div>
+                        <strong>Protect Your Information</strong>
+                        <p>
+                            Only submit information you are authorized to share
+                            with your application.
+                        </p>
+                    </div>
+                </div>
+            </aside>
+
+        </div>
+
+        {% if nutrition_details %}
+        <section class="card nutrition-section">
+            <h2>Nutritional Details</h2>
+            <p class="subtitle">
+                Values returned by the backend for the selected food item.
+                Units depend on how the dataset is defined.
+            </p>
+
+            <div class="table-wrapper">
+                <table class="nutrition-table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Attribute</th>
+                            <th scope="col">Value</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <td>Food Name</td>
+                            <td>{{ nutrition_details['Food Name'] }}</td>
+                        </tr>
+                        <tr>
+                            <td>Glycemic Index</td>
+                            <td>{{ nutrition_details['Glycemic Index'] }}</td>
+                        </tr>
+                        <tr>
+                            <td>Calories</td>
+                            <td>{{ nutrition_details['Calories'] }}</td>
+                        </tr>
+                        <tr>
+                            <td>Carbohydrates</td>
+                            <td>{{ nutrition_details['Carbohydrates'] }}</td>
+                        </tr>
+                        <tr>
+                            <td>Protein</td>
+                            <td>{{ nutrition_details['Protein'] }}</td>
+                        </tr>
+                        <tr>
+                            <td>Fat</td>
+                            <td>{{ nutrition_details['Fat'] }}</td>
+                        </tr>
+                        <tr>
+                            <td>Fiber Content</td>
+                            <td>{{ nutrition_details['Fiber Content'] }}</td>
+                        </tr>
+                        <tr>
+                            <td>Sodium Content</td>
+                            <td>{{ nutrition_details['Sodium Content'] }}</td>
+                        </tr>
+                        <tr>
+                            <td>Potassium Content</td>
+                            <td>{{ nutrition_details['Potassium Content'] }}</td>
+                        </tr>
+                        <tr>
+                            <td>Magnesium Content</td>
+                            <td>{{ nutrition_details['Magnesium Content'] }}</td>
+                        </tr>
+                        <tr>
+                            <td>Calcium Content</td>
+                            <td>{{ nutrition_details['Calcium Content'] }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        {% endif %}
+
+        <div class="disclaimer">
+            <strong>Health notice:</strong>
+            This educational prototype cannot diagnose diabetes, predict an
+            individual's actual glucose response with clinical certainty, or
+            recommend medication changes. Do not use its output to change
+            medication, insulin, meals, or treatment without guidance from a
+            qualified healthcare professional.
+        </div>
+
+    </main>
+
+    <footer>
+        <p>© 2026 Dr.Diabetic · Blood Sugar Prediction</p>
+        <p>Educational use only · <a href="about.html">About Dr.Diabetic</a></p>
+    </footer>
+
+    <script>
+        const predictionForm = document.getElementById("predictionForm");
+        const submitButton = document.getElementById("submitButton");
+
+        predictionForm.addEventListener("submit", function () {
+            if (!predictionForm.checkValidity()) {
+                return;
+            }
+
+            submitButton.disabled = true;
+            submitButton.innerHTML = "<span>Submitting...</span>";
+        });
+    </script>
+
+</body>
+</html>
+```

@@ -1,0 +1,529 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account | Dr.Diabetic</title>
+
+    <style>
+        :root {
+            --primary: #008f83;
+            --primary-dark: #006b62;
+            --navy: #173b49;
+            --muted: #71818a;
+            --border: #dce7eb;
+            --white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            min-height: 100vh;
+            color: var(--navy);
+            background:
+                linear-gradient(135deg, rgba(9,42,54,.78),
+                rgba(0,143,131,.63)),
+                url('/img/bg1.avif') center/cover fixed no-repeat;
+        }
+
+        a { text-decoration: none; }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 7%;
+        }
+
+        .brand {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: white;
+        }
+
+        .brand span { color: #a5f0e5; }
+
+        .nav-link {
+            color: white;
+            font-size: .95rem;
+            font-weight: 600;
+        }
+
+        main { padding: 20px 16px 45px; }
+
+        .container {
+            max-width: 850px;
+            width: 100%;
+            margin: 10px auto;
+            overflow: hidden;
+            border-radius: 22px;
+            background: white;
+            box-shadow: 0 24px 70px rgba(0,0,0,.22);
+        }
+
+        .header {
+            padding: 35px;
+            color: white;
+            background: linear-gradient(120deg,#07535b,#009688);
+        }
+
+        .header-icon {
+            font-size: 2rem;
+            margin-bottom: 12px;
+        }
+
+        .header h1 {
+            margin-bottom: 10px;
+            font-size: clamp(1.65rem,4vw,2.25rem);
+        }
+
+        .header p { line-height: 1.7; color: #e0f8f4; }
+
+        .body { padding: 32px 35px; }
+
+        .section-title {
+            margin-bottom: 10px;
+            font-size: 1.15rem;
+        }
+
+        .section-description {
+            margin-bottom: 23px;
+            color: var(--muted);
+            font-size: .88rem;
+            line-height: 1.6;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2,minmax(0,1fr));
+            gap: 20px;
+        }
+
+        .group { min-width: 0; }
+        .full { grid-column: 1/-1; }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: .88rem;
+            font-weight: 700;
+            color: #344f5b;
+        }
+
+        input:not([type="checkbox"]), select {
+            width: 100%;
+            min-height: 47px;
+            padding: 12px 13px;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            outline: none;
+            background: #fbfdfe;
+            color: var(--navy);
+            font: inherit;
+        }
+
+        input:focus, select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0,143,131,.12);
+        }
+
+        .password-wrap { position: relative; }
+
+        .password-wrap input { padding-right: 65px; }
+
+        .toggle {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            border: 0;
+            background: transparent;
+            color: var(--primary-dark);
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .hint {
+            display: block;
+            margin-top: 6px;
+            color: var(--muted);
+            font-size: .78rem;
+            line-height: 1.5;
+        }
+
+        .divider {
+            height: 1px;
+            margin: 30px 0;
+            background: #e8eff1;
+        }
+
+        .consent {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 16px;
+            border: 1px solid var(--border);
+            border-radius: 11px;
+            background: #f8fbfc;
+        }
+
+        .consent input {
+            width: 18px;
+            height: 18px;
+            margin-top: 3px;
+            accent-color: var(--primary);
+        }
+
+        .consent label {
+            line-height: 1.6;
+            font-weight: 400;
+            margin: 0;
+        }
+
+        .consent strong {
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 13px;
+            margin-top: 27px;
+        }
+
+        .btn {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 49px;
+            padding: 13px 22px;
+            border: 1px solid transparent;
+            border-radius: 10px;
+            font-size: .95rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .primary {
+            flex: 1;
+            color: white;
+            background: linear-gradient(135deg,var(--primary),var(--primary-dark));
+        }
+
+        .secondary {
+            color: #50656e;
+            background: white;
+            border-color: var(--border);
+        }
+
+        .login-prompt {
+            margin-top: 24px;
+            text-align: center;
+            color: var(--muted);
+            font-size: .9rem;
+            line-height: 1.7;
+        }
+
+        .login-prompt a { color: var(--primary-dark); font-weight: 700; }
+
+        .message {
+            margin-bottom: 22px;
+            padding: 14px;
+            border-radius: 9px;
+            line-height: 1.6;
+        }
+
+        .error {
+            color: #991b1b;
+            background: #fee2e2;
+            border: 1px solid #fecaca;
+        }
+
+        .success {
+            text-align: center;
+            padding: 25px 10px 35px;
+        }
+
+        .success-icon {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 88px;
+            height: 88px;
+            margin: 0 auto 22px;
+            border-radius: 50%;
+            background: #dcfce7;
+            color: #15803d;
+            font-size: 52px;
+            font-weight: bold;
+        }
+
+        .success h2 {
+            color: #15803d;
+            font-size: 1.8rem;
+            margin-bottom: 13px;
+        }
+
+        .success p {
+            color: #52656e;
+            line-height: 1.8;
+            margin-bottom: 24px;
+        }
+
+        .footer {
+            padding: 18px;
+            color: white;
+            text-align: center;
+            font-size: .83rem;
+            line-height: 1.7;
+        }
+
+        @media(max-width:600px) {
+            .navbar { padding: 18px 20px; }
+            main { padding: 10px 12px 30px; }
+            .header { padding: 27px 22px; }
+            .body { padding: 25px 20px; }
+            .grid { grid-template-columns: 1fr; gap: 18px; }
+            .full { grid-column: auto; }
+            .buttons { flex-direction: column; }
+            .btn { width: 100%; }
+        }
+    </style>
+</head>
+
+<body>
+<nav class="navbar">
+    <a href="{{ url_for('homepage') }}" class="brand">Dr.<span>Diabetic</span></a>
+    <a href="{{ url_for('login') }}" class="nav-link">Already registered? Login</a>
+</nav>
+
+<main>
+<section class="container">
+    <div class="header">
+        <div class="header-icon" aria-hidden="true">♥</div>
+        <h1>Create Your Account</h1>
+        <p>Join Dr.Diabetic to organize your account and health profile information.</p>
+    </div>
+
+    <div class="body">
+
+        {% if registration_success %}
+        <div class="success" role="status">
+            <div class="success-icon" aria-hidden="true">✓</div>
+            <h2>Registration Successful!</h2>
+            <p>
+                Your account has been created successfully.<br>
+                You can now log in to Dr. Diabetic.
+            </p>
+            <a href="{{ url_for('login') }}" class="btn primary">
+                Go to Login →
+            </a>
+        </div>
+
+        {% else %}
+
+        {% if error %}
+        <div class="message error" role="alert">{{ error }}</div>
+        {% endif %}
+
+        <form id="registrationForm"
+              method="POST"
+              action="{{ url_for('registration') }}">
+
+            <input type="checkbox" name="doctor_consent" value="yes">
+
+            <h2 class="section-title">1. Personal Information</h2>
+            <p class="section-description">Enter your account and profile details.</p>
+
+            <div class="grid">
+                <div class="group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username"
+                           minlength="3" maxlength="40"
+                           autocomplete="username" required>
+                </div>
+
+                <div class="group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email"
+                           autocomplete="email" maxlength="254" required>
+                </div>
+
+                <div class="group full">
+                    <label for="password">Password</label>
+                    <div class="password-wrap">
+                        <input type="password" id="password" name="password"
+                               minlength="8" maxlength="128"
+                               autocomplete="new-password" required>
+                        <button type="button" class="toggle"
+                                id="togglePassword">Show</button>
+                    </div>
+                    <span class="hint">Use at least 8 characters. Do not reuse another account's password.</span>
+                </div>
+
+                <div class="group">
+                    <label for="dateOfBirth">Date of Birth</label>
+                    <input type="date" id="dateOfBirth" name="date_of_birth" required>
+                </div>
+
+                <div class="group">
+                    <label for="location">Location</label>
+                    <input type="text" id="location" name="location"
+                           maxlength="120" autocomplete="address-level2" required>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <h2 class="section-title">2. Health Information</h2>
+            <p class="section-description">
+                Optional measurements can be left blank. Enter only information you wish to provide.
+            </p>
+
+            <div class="grid">
+                <div class="group">
+                    <label for="diabetesType">Type of Diabetes</label>
+                    <select id="diabetesType" name="diabetes_type" required>
+                        <option value="" disabled selected>Select type</option>
+                        <option value="Type 1">Type 1</option>
+                        <option value="Type 2">Type 2</option>
+                        <option value="Gestational">Gestational</option>
+                        <option value="Other">Other / Not sure</option>
+                    </select>
+                </div>
+
+                <div class="group">
+                    <label for="duration">Duration of Diabetes (years)</label>
+                    <input type="number" id="duration" name="duration"
+                           min="0" max="120" step="0.1" required>
+                </div>
+
+                <div class="group">
+                    <label for="hba1c">HbA1c (%) <span class="hint">Optional</span></label>
+                    <input type="number" id="hba1c" name="hba1c"
+                           min="0" max="20" step="0.1">
+                </div>
+
+                <div class="group">
+                    <label for="cPeptide">C-peptide (ng/mL) <span class="hint">Optional</span></label>
+                    <input type="number" id="cPeptide" name="c_peptide"
+                           min="0" max="100" step="0.01">
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <h2 class="section-title">3. Information Sharing</h2>
+            <p class="section-description">
+                This optional consent records your preference; it does not itself send information to a doctor.
+            </p>
+
+            <div class="consent">
+                <input type="checkbox" id="doctorConsent" name="doctor_consent" value="yes">
+                <label for="doctorConsent">
+                    <strong>Share information with my doctor</strong>
+                    I consent to sharing my health information with my designated doctor,
+                    subject to the application's privacy practices and access controls.
+                </label>
+            </div>
+
+            <div class="buttons">
+                <button type="submit" class="btn primary" id="registerButton">
+                    Create Account →
+                </button>
+                <a href="{{ url_for('login') }}" class="btn secondary">Cancel</a>
+            </div>
+
+            <p class="login-prompt">
+                Already have an account?
+                <a href="{{ url_for('login') }}">Sign in</a>
+            </p>
+        </form>
+        {% endif %}
+    </div>
+</section>
+</main>
+
+<footer class="footer">
+    <p>© 2026 Dr.Diabetic · Diabetes Management Prototype</p>
+    <p>Your health information should be handled securely and responsibly.</p>
+</footer>
+
+<script>
+    const passwordInput = document.getElementById("password");
+    const togglePassword = document.getElementById("togglePassword");
+    const dobInput = document.getElementById("dateOfBirth");
+    const form = document.getElementById("registrationForm");
+    const registerButton = document.getElementById("registerButton");
+
+    if (dobInput) {
+        const now = new Date();
+        dobInput.max = [
+            now.getFullYear(),
+            String(now.getMonth() + 1).padStart(2, "0"),
+            String(now.getDate()).padStart(2, "0")
+        ].join("-");
+    }
+
+    if (togglePassword && passwordInput) {
+        togglePassword.addEventListener("click", function () {
+            const show = passwordInput.type === "password";
+            passwordInput.type = show ? "text" : "password";
+            togglePassword.textContent = show ? "Hide" : "Show";
+            togglePassword.setAttribute("aria-label", show ? "Hide password" : "Show password");
+        });
+    }
+
+    if (form) {
+        form.addEventListener("submit", function (event) {
+            if (dobInput && dobInput.value && dobInput.value > dobInput.max) {
+                event.preventDefault();
+                alert("Date of birth cannot be in the future.");
+                dobInput.focus();
+                return;
+            }
+
+            const hba1c = document.getElementById("hba1c");
+            const cPeptide = document.getElementById("cPeptide");
+            const duration = document.getElementById("duration");
+
+            if (hba1c.value !== "" &&
+                (Number(hba1c.value) < 0 || Number(hba1c.value) > 20)) {
+                event.preventDefault();
+                alert("Please check the HbA1c value.");
+                hba1c.focus();
+                return;
+            }
+
+            if (cPeptide.value !== "" &&
+                (Number(cPeptide.value) < 0 || Number(cPeptide.value) > 100)) {
+                event.preventDefault();
+                alert("Please check the C-peptide value.");
+                cPeptide.focus();
+                return;
+            }
+
+            if (Number(duration.value) < 0) {
+                event.preventDefault();
+                alert("Please enter a valid diabetes duration.");
+                duration.focus();
+                return;
+            }
+
+            // Let the browser submit the form to Flask.
+            // Do not display success here; Flask decides after saving to SQLite.
+            if (registerButton) {
+                registerButton.disabled = true;
+                registerButton.textContent = "Creating Account...";
+            }
+        });
+    }
+</script>
+</body>
+</html>

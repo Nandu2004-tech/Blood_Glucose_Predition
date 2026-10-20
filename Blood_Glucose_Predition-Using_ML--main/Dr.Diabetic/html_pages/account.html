@@ -1,0 +1,535 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="View your Diabetic Care account and illustrative blood sugar history.">
+  <title>My Account | Diabetic Care</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f1f7fa;
+      color: #203447;
+      line-height: 1.6;
+    }
+
+    header {
+      background: #073b4c;
+      color: white;
+      padding: 22px 6%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    header h1 {
+      font-size: 24px;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    header a {
+      color: white;
+      text-decoration: none;
+      background: #12a594;
+      padding: 9px 16px;
+      border-radius: 8px;
+    }
+
+    .logout-button {
+      background: #d9534f;
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    main {
+      max-width: 1100px;
+      margin: 30px auto;
+      padding: 0 18px;
+    }
+
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 8px 28px rgba(7, 59, 76, 0.08);
+    }
+
+    h2, h3 {
+      color: #087f8c;
+      margin-bottom: 18px;
+    }
+
+    .account-details {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+    }
+
+    .detail {
+      background: #f1f9f8;
+      border: 1px solid #d9eeeb;
+      border-radius: 10px;
+      padding: 16px;
+      overflow-wrap: anywhere;
+    }
+
+    .detail label {
+      display: block;
+      color: #607482;
+      font-weight: bold;
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
+
+    .detail p {
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .section {
+      margin-top: 32px;
+    }
+
+    .table-wrapper {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 450px;
+    }
+
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #e1e9ee;
+    }
+
+    th {
+      background: #e8f7f5;
+      color: #073b4c;
+    }
+
+    #history-form {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 14px;
+      align-items: end;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
+
+    input {
+      width: 100%;
+      padding: 11px;
+      border: 1px solid #ccd8df;
+      border-radius: 8px;
+      font-size: 15px;
+    }
+
+    input:focus {
+      outline: 2px solid #12a594;
+      border-color: transparent;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 11px 18px;
+      color: white;
+      background: #087f8c;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: bold;
+    }
+
+    .btn:hover {
+      background: #073b4c;
+    }
+
+    .chart-container {
+      position: relative;
+      width: 100%;
+      height: 340px;
+    }
+
+    .notice {
+      margin-top: 25px;
+      padding: 15px;
+      background: #fff7e6;
+      border-left: 4px solid #e6a23c;
+      border-radius: 7px;
+      color: #614b21;
+      font-size: 14px;
+    }
+
+    .message {
+      margin-top: 12px;
+      color: #073b4c;
+      font-size: 14px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 22px;
+      margin-top: 25px;
+      background: #073b4c;
+      color: white;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 20px 15px;
+      }
+
+      header h1 {
+        font-size: 20px;
+      }
+
+      .chart-container {
+        height: 270px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+<header>
+  <h1>♥ Diabetic Care</h1>
+
+  <div class="header-actions">
+    <a href="{{ url_for('homepage') }}">⌂ Home</a>
+
+    <form action="{{ url_for('logout') }}" method="POST">
+      <input
+        type="hidden"
+        name="csrf_token"
+        value="{{ csrf_token }}"
+      >
+      <button type="submit" class="logout-button">Logout</button>
+    </form>
+  </div>
+</header>
+
+<main>
+  <section class="container">
+    <h2>My Account</h2>
+
+    <div class="account-details">
+      <div class="detail">
+        <label>Name</label>
+        <p>{{ user.get("username") or "Not provided" }}</p>
+      </div>
+
+      <div class="detail">
+        <label>Email</label>
+        <p>{{ user.get("email") or "Not provided" }}</p>
+      </div>
+
+      <div class="detail">
+        <label>Diabetes Type</label>
+        <p>{{ user.get("diabetes_type") or "Not provided" }}</p>
+      </div>
+
+      <div class="detail">
+        <label>Age</label>
+        <p id="age">Not provided</p>
+      </div>
+
+      <div class="detail">
+        <label>HbA1c</label>
+        <p>
+          {% if user.get("hba1c") is not none and user.get("hba1c") != "" %}
+            {{ user.get("hba1c") }}%
+          {% else %}
+            Not provided
+          {% endif %}
+        </p>
+      </div>
+
+      <div class="detail">
+        <label>C-peptide Levels</label>
+        <p>
+          {% if user.get("c_peptide") is not none and user.get("c_peptide") != "" %}
+            {{ user.get("c_peptide") }}
+          {% else %}
+            Not provided
+          {% endif %}
+        </p>
+      </div>
+
+      <div class="detail">
+        <label>Location</label>
+        <p>{{ user.get("location") or "Not provided" }}</p>
+      </div>
+
+      <div class="detail">
+        <label>Duration of Diabetes</label>
+        <p>
+          {% if user.get("duration") is not none and user.get("duration") != "" %}
+            {{ user.get("duration") }} years
+          {% else %}
+            Not provided
+          {% endif %}
+        </p>
+      </div>
+
+      <div class="detail">
+        <label>Date of Birth</label>
+        <p id="date-of-birth">
+          {{ user.get("date_of_birth") or "Not provided" }}
+        </p>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3>Blood Sugar History</h3>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Time</th>
+              <th>Blood Sugar (mg/dL)</th>
+            </tr>
+          </thead>
+          <tbody id="sugar-level-data"></tbody>
+        </table>
+      </div>
+      <p id="history-message" class="message" aria-live="polite"></p>
+    </div>
+
+    <div class="section">
+      <h3>Add Blood Sugar Record</h3>
+
+      <form id="history-form">
+        <div class="form-group">
+          <label for="new-date">Date</label>
+          <input type="date" id="new-date" required>
+        </div>
+
+        <div class="form-group">
+          <label for="new-time">Time</label>
+          <input type="time" id="new-time" required>
+        </div>
+
+        <div class="form-group">
+          <label for="new-value">Blood Sugar (mg/dL)</label>
+          <input
+            type="number"
+            id="new-value"
+            min="1"
+            max="1000"
+            step="1"
+            required
+          >
+        </div>
+
+        <button type="submit" class="btn">Add Record</button>
+      </form>
+    </div>
+
+    <div class="section">
+      <h3>Blood Sugar Trend</h3>
+      <div class="chart-container">
+        <canvas id="myLineChart"></canvas>
+      </div>
+      <p id="chart-message" class="message" aria-live="polite"></p>
+    </div>
+
+    <div class="notice">
+      <strong>Note:</strong> Records added here are kept only in the current
+      page session and are not saved to the server database. No sample patient
+      readings are preloaded. This chart is for recording and visualization
+      only; it is not a diagnosis or a substitute for medical advice.
+    </div>
+  </section>
+</main>
+
+<footer>
+  &copy; 2026 Diabetic Management System. All Rights Reserved.
+</footer>
+
+<script>
+  "use strict";
+
+  // Flask safely serializes this value for JavaScript.
+  const dateOfBirth = {{ user.get("date_of_birth") | tojson }};
+
+  function calculateAge(dateString) {
+    if (!dateString) return "Not provided";
+
+    const birthDate = new Date(String(dateString) + "T00:00:00");
+
+    if (Number.isNaN(birthDate.getTime())) {
+      return "Not provided";
+    }
+
+    const today = new Date();
+    let age = today.getFullYear() - birthDate.getFullYear();
+
+    const birthdayNotReached =
+      today.getMonth() < birthDate.getMonth() ||
+      (
+        today.getMonth() === birthDate.getMonth() &&
+        today.getDate() < birthDate.getDate()
+      );
+
+    if (birthdayNotReached) age--;
+
+    return age >= 0 ? age : "Not provided";
+  }
+
+  document.getElementById("age").textContent =
+    calculateAge(dateOfBirth);
+
+  // Start with an empty list: never invent patient readings.
+  let sugarLevelData = [];
+  let sugarChart = null;
+
+  const tableBody = document.getElementById("sugar-level-data");
+  const historyForm = document.getElementById("history-form");
+  const historyMessage = document.getElementById("history-message");
+  const chartMessage = document.getElementById("chart-message");
+
+  function renderHistory() {
+    tableBody.replaceChildren();
+
+    const sortedData = [...sugarLevelData].sort((a, b) =>
+      (b.date + b.time).localeCompare(a.date + a.time)
+    );
+
+    if (sortedData.length === 0) {
+      historyMessage.textContent =
+        "No records added yet. Use the form below to add a reading.";
+    } else {
+      historyMessage.textContent = "";
+    }
+
+    sortedData.forEach(record => {
+      const row = document.createElement("tr");
+
+      [record.date, record.time, record.value].forEach(value => {
+        const cell = document.createElement("td");
+        cell.textContent = String(value);
+        row.appendChild(cell);
+      });
+
+      tableBody.appendChild(row);
+    });
+
+    renderChart();
+  }
+
+  function renderChart() {
+    const canvas = document.getElementById("myLineChart");
+
+    if (sugarChart) {
+      sugarChart.destroy();
+      sugarChart = null;
+    }
+
+    if (typeof Chart === "undefined") {
+      chartMessage.textContent =
+        "Chart library could not be loaded. Check your internet connection.";
+      return;
+    }
+
+    chartMessage.textContent = "";
+
+    const sortedData = [...sugarLevelData].sort((a, b) =>
+      (a.date + a.time).localeCompare(b.date + b.time)
+    );
+
+    sugarChart = new Chart(canvas, {
+      type: "line",
+      data: {
+        labels: sortedData.map(item => `${item.date} ${item.time}`),
+        datasets: [{
+          label: "Blood Sugar (mg/dL)",
+          data: sortedData.map(item => item.value),
+          borderColor: "#087f8c",
+          backgroundColor: "rgba(18, 165, 148, 0.15)",
+          fill: true,
+          tension: 0.3
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          x: {
+            title: {
+              display: true,
+              text: "Date and time"
+            }
+          },
+          y: {
+            beginAtZero: false,
+            title: {
+              display: true,
+              text: "Blood Sugar (mg/dL)"
+            }
+          }
+        }
+      }
+    });
+  }
+
+  historyForm.addEventListener("submit", event => {
+    event.preventDefault();
+
+    const date = document.getElementById("new-date").value;
+    const time = document.getElementById("new-time").value;
+    const value = Number(document.getElementById("new-value").value);
+
+    if (
+      !date ||
+      !time ||
+      !Number.isFinite(value) ||
+      value < 1 ||
+      value > 1000
+    ) {
+      alert("Enter a valid date, time and blood sugar reading.");
+      return;
+    }
+
+    sugarLevelData.push({ date, time, value });
+
+    renderHistory();
+    historyForm.reset();
+  });
+
+  renderHistory();
+</script>
+</body>
+</html>

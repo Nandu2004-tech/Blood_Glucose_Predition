@@ -1,0 +1,304 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Healthy Recipes | Dr. Diabetic</title>
+
+    <style>
+        :root {
+            --primary: #0f766e;
+            --primary-dark: #115e59;
+            --background: #f4f8f7;
+            --text: #183b3a;
+            --muted: #647775;
+            --white: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: var(--background);
+            color: var(--text);
+        }
+
+        header {
+            background:
+                linear-gradient(120deg, rgba(8, 47, 53, .94),
+                rgba(15, 118, 110, .84)),
+                url('../img/bg1.avif') center/cover;
+            color: white;
+            text-align: center;
+            padding: 55px 20px 65px;
+        }
+
+        .top-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1150px;
+            margin: 0 auto 45px;
+            gap: 15px;
+        }
+
+        .brand {
+            color: white;
+            font-size: 23px;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            border: 1px solid rgba(255,255,255,.65);
+            padding: 10px 16px;
+            border-radius: 9px;
+            transition: .2s;
+        }
+
+        .nav-link:hover {
+            background: white;
+            color: var(--primary-dark);
+        }
+
+        header h1 {
+            font-size: clamp(30px, 5vw, 46px);
+            margin: 0 0 14px;
+        }
+
+        header p {
+            color: #e0f2f1;
+            margin: 0 auto 25px;
+            line-height: 1.7;
+            max-width: 600px;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            max-width: 560px;
+            margin: 0 auto;
+            background: white;
+            padding: 6px;
+            border-radius: 13px;
+            box-shadow: 0 10px 30px rgba(0,0,0,.16);
+        }
+
+        #searchInput {
+            flex: 1;
+            min-width: 0;
+            padding: 14px;
+            font-size: 16px;
+            border: none;
+            outline: none;
+            background: transparent;
+            color: var(--text);
+        }
+
+        .search-button {
+            border: none;
+            border-radius: 9px;
+            padding: 13px 18px;
+            background: var(--primary);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .search-button:hover {
+            background: var(--primary-dark);
+        }
+
+        .container {
+            max-width: 1150px;
+            margin: auto;
+            padding: 35px 20px 60px;
+        }
+
+        .section-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 22px;
+        }
+
+        .section-heading h2 {
+            margin: 0;
+            font-size: 25px;
+        }
+
+        #resultCount {
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .recipe-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 22px;
+        }
+
+        .recipe-card {
+            background: var(--white);
+            border: 1px solid #e2eeeb;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 5px 18px rgba(18, 65, 60, .06);
+            transition: transform .2s, box-shadow .2s;
+        }
+
+        .recipe-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 28px rgba(18, 65, 60, .12);
+        }
+
+        .recipe-card img {
+            width: 100%;
+            height: 190px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .recipe-content {
+            padding: 19px;
+        }
+
+        .recipe-content h3 {
+            margin: 0 0 10px;
+            font-size: 19px;
+        }
+
+        .recipe-content p {
+            color: var(--muted);
+            line-height: 1.6;
+            margin: 0 0 15px;
+        }
+
+        .recipe-content a {
+            display: inline-block;
+            background: #e5f5f1;
+            color: var(--primary-dark);
+            text-decoration: none;
+            font-weight: bold;
+            padding: 10px 14px;
+            border-radius: 8px;
+        }
+
+        .recipe-content a:hover {
+            background: #ccece5;
+        }
+
+        .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            background: white;
+            border-radius: 14px;
+            padding: 40px 20px;
+            color: var(--muted);
+        }
+
+        .disclaimer {
+            margin-top: 35px;
+            padding: 16px 18px;
+            background: #e8f5f2;
+            border-left: 4px solid var(--primary);
+            border-radius: 8px;
+            color: #355d58;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        footer {
+            background: #103c3a;
+            color: #d5e8e5;
+            text-align: center;
+            padding: 22px 15px;
+            font-size: 14px;
+        }
+
+        @media (max-width: 600px) {
+            header {
+                padding: 30px 15px 45px;
+            }
+
+            .top-nav {
+                margin-bottom: 35px;
+            }
+
+            .brand {
+                font-size: 19px;
+            }
+
+            .search-button {
+                padding: 12px;
+            }
+
+            .container {
+                padding: 28px 15px 40px;
+            }
+
+            .recipe-list {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav class="top-nav">
+            <a class="brand" href="homepage.html">Dr. Diabetic</a>
+            <a class="nav-link" href="homepage.html">← Home</a>
+        </nav>
+
+        <h1>Healthy Recipes</h1>
+        <p>Discover delicious recipes and explore food ideas for a balanced lifestyle.</p>
+
+        <div class="search-box">
+            <input
+                type="search"
+                id="searchInput"
+                placeholder="Search recipes..."
+                aria-label="Search recipes"
+            >
+            <button class="search-button" id="searchButton" type="button">
+                Search
+            </button>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="section-heading">
+            <h2>Explore Recipes</h2>
+            <span id="resultCount" aria-live="polite"></span>
+        </div>
+
+        <section id="recipeList" class="recipe-list" aria-live="polite">
+            <div class="empty-state">Loading recipes...</div>
+        </section>
+
+        <div class="disclaimer">
+            <strong>Health note:</strong> Nutritional needs vary from person to
+            person. These recipes are general food ideas, not personalized
+            medical advice. If you manage diabetes, follow your healthcare
+            professional's nutrition guidance.
+        </div>
+    </main>
+
+    <footer>
+        © 2026 Dr. Diabetic | Healthy choices, better living.
+    </footer>
+
+    <script src="../data/recipes.js"></script>
+    <script src="search.js"></script>
+</body>
+</html>
+```

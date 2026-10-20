@@ -1,0 +1,674 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Consultation | Dr. Diabetic</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f8fb;
+            color: #243447;
+            line-height: 1.6;
+        }
+
+        header {
+            background: #087f8c;
+            color: white;
+            padding: 18px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .logo {
+            color: white;
+            font-size: 25px;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 18px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        .hero {
+            padding: 65px 20px;
+            text-align: center;
+            color: white;
+            background:
+                linear-gradient(rgba(0,70,80,.82), rgba(0,70,80,.82)),
+                url("{{ url_for('images', filename='bg1.avif') }}")
+                center/cover no-repeat;
+        }
+
+        .hero h1 {
+            font-size: clamp(28px, 5vw, 42px);
+            margin-bottom: 12px;
+        }
+
+        .hero p {
+            max-width: 650px;
+            margin: auto;
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 35px auto;
+            padding: 0 20px;
+        }
+
+        .notice {
+            background: #fff8df;
+            border-left: 5px solid #e3ad28;
+            padding: 15px 18px;
+            margin-bottom: 25px;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .search-section {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .search-section h2 {
+            margin-bottom: 8px;
+            color: #087f8c;
+        }
+
+        #doctor-search {
+            width: 100%;
+            max-width: 600px;
+            margin-top: 16px;
+            padding: 14px 16px;
+            border: 1px solid #cbd5df;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        #doctor-search:focus {
+            outline: 2px solid #087f8c;
+        }
+
+        #doctor-count {
+            margin-top: 12px;
+            color: #526475;
+            font-size: 14px;
+        }
+
+        .doctor-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 22px;
+        }
+
+        .doctor-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 18px rgba(25,50,70,.09);
+            border: 1px solid #e5edf2;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .doctor-card-content {
+            padding: 22px;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .doctor-avatar {
+            width: 78px;
+            height: 78px;
+            border-radius: 50%;
+            background: #dff3f3;
+            color: #087f8c;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+
+        .doctor-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .doctor-card h3 {
+            color: #087f8c;
+            font-size: 20px;
+            margin-bottom: 6px;
+        }
+
+        .specialty {
+            color: #34495e;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+
+        .doctor-info {
+            font-size: 14px;
+            color: #526475;
+            margin-bottom: 8px;
+            overflow-wrap: anywhere;
+        }
+
+        .doctor-description {
+            font-size: 14px;
+            margin: 12px 0 18px;
+            color: #435363;
+        }
+
+        .demo-label {
+            margin-top: 12px;
+            padding: 8px;
+            background: #fff8df;
+            color: #795b10;
+            border-radius: 5px;
+            font-size: 12px;
+        }
+
+        .contact-button {
+            display: inline-block;
+            margin-top: auto;
+            padding: 10px 14px;
+            border-radius: 6px;
+            background: #087f8c;
+            color: white;
+            text-decoration: none;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .contact-disabled {
+            background: #e8eef2;
+            color: #526475;
+            cursor: default;
+        }
+
+        .message {
+            text-align: center;
+            background: white;
+            padding: 30px 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            color: #526475;
+        }
+
+        footer {
+            margin-top: 55px;
+            background: #123b46;
+            color: white;
+            text-align: center;
+            padding: 24px 15px;
+            font-size: 14px;
+        }
+
+        @media (max-width: 600px) {
+            header {
+                justify-content: center;
+                text-align: center;
+            }
+
+            nav {
+                justify-content: center;
+                gap: 12px;
+            }
+
+            .hero {
+                padding: 45px 18px;
+            }
+
+            main {
+                padding: 0 14px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <a class="logo" href="{{ url_for('homepage') }}">Dr. Diabetic</a>
+
+    <nav>
+        <a href="{{ url_for('homepage') }}">Home</a>
+        <a href="{{ url_for('prediction') }}">Prediction</a>
+        <a href="{{ url_for('diet') }}">Diet Plans</a>
+        <a href="{{ url_for('articles') }}">Articles</a>
+        <a href="{{ url_for('about') }}">About</a>
+        <a href="{{ url_for('consultation') }}">Consultation</a>
+    </nav>
+</header>
+
+<section class="hero">
+    <h1>Doctor Consultation</h1>
+    <p>
+        Explore doctor profiles and find information that may help
+        you prepare for a healthcare consultation.
+    </p>
+</section>
+
+<main>
+    <div class="notice">
+        <strong>Important:</strong>
+        Some profiles may be demonstration data. Names, qualifications,
+        experience, hospital affiliations, and contact details have not
+        been independently verified. Verify credentials before choosing
+        a healthcare professional. This page does not provide a medical
+        diagnosis.
+    </div>
+
+    <section class="search-section">
+        <h2>Find a Doctor</h2>
+        <p>Search by name, specialty, qualification, or hospital.</p>
+
+        <input
+            type="search"
+            id="doctor-search"
+            placeholder="Search doctors..."
+            aria-label="Search doctors"
+            autocomplete="off"
+        >
+
+        <p id="doctor-count" aria-live="polite">
+            Loading doctor profiles...
+        </p>
+    </section>
+
+    <section
+        class="doctor-list"
+        id="doctor-list"
+        aria-live="polite"
+    ></section>
+
+    <div class="message" id="doctor-message" hidden>
+        No doctor profiles found. Try another search.
+    </div>
+</main>
+
+<footer>
+    <p>Dr. Diabetic — Diabetes Information and Support</p>
+    <p>For medical advice, consult a qualified healthcare professional.</p>
+</footer>
+
+<!-- Load the existing doctor data file from Flask -->
+<script src="{{ url_for('data_files', filename='doctors.js') }}"></script>
+
+<script>
+(function () {
+    "use strict";
+
+    const doctorList = document.getElementById("doctor-list");
+    const doctorSearch = document.getElementById("doctor-search");
+    const doctorCount = document.getElementById("doctor-count");
+    const doctorMessage = document.getElementById("doctor-message");
+
+    /*
+     * Fallback profiles are only for testing the page layout.
+     * Replace these with verified doctor records before production.
+     */
+    const demoDoctors = [
+        {
+            name: "Demo Doctor 1",
+            specialty: "Diabetology",
+            qualification: "Demo qualification — not verified",
+            experience: "Not verified",
+            hospital: "Demo clinic",
+            description: "Sample profile for testing the consultation page.",
+            demo: true
+        },
+        {
+            name: "Demo Doctor 2",
+            specialty: "Endocrinology",
+            qualification: "Demo qualification — not verified",
+            experience: "Not verified",
+            hospital: "Demo medical centre",
+            description: "Sample profile for testing the consultation page.",
+            demo: true
+        },
+        {
+            name: "Demo Doctor 3",
+            specialty: "General Medicine",
+            qualification: "Demo qualification — not verified",
+            experience: "Not verified",
+            hospital: "Demo healthcare centre",
+            description: "Sample profile for testing the consultation page.",
+            demo: true
+        },
+        {
+            name: "Demo Doctor 4",
+            specialty: "Diabetes Nutrition",
+            qualification: "Demo qualification — not verified",
+            experience: "Not verified",
+            hospital: "Demo wellness centre",
+            description: "Sample profile for testing the consultation page.",
+            demo: true
+        },
+        {
+            name: "Demo Doctor 5",
+            specialty: "Internal Medicine",
+            qualification: "Demo qualification — not verified",
+            experience: "Not verified",
+            hospital: "Demo clinic",
+            description: "Sample profile for testing the consultation page.",
+            demo: true
+        }
+    ];
+
+    function getDoctors() {
+        const sources = [
+            window.doctors,
+            window.doctorsData,
+            window.doctorData,
+            window.doctorList,
+            window.doctorDetails
+        ];
+
+        for (const source of sources) {
+            if (Array.isArray(source) && source.length > 0) {
+                return source;
+            }
+        }
+
+        // Keep the UI testable if the external file has no records.
+        return demoDoctors;
+    }
+
+    function getValue(doctor, keys, fallback) {
+        for (const key of keys) {
+            const value = doctor[key];
+
+            if (
+                value !== undefined &&
+                value !== null &&
+                String(value).trim() !== ""
+            ) {
+                return String(value).trim();
+            }
+        }
+
+        return fallback || "";
+    }
+
+    function addTextElement(parent, className, text) {
+        if (!text) return;
+
+        const element = document.createElement("p");
+        element.className = className;
+        element.textContent = text;
+        parent.appendChild(element);
+    }
+
+    function createDoctorCard(doctor, index) {
+        const card = document.createElement("article");
+        card.className = "doctor-card";
+
+        const content = document.createElement("div");
+        content.className = "doctor-card-content";
+
+        const name = getValue(
+            doctor,
+            ["name", "doctorName", "doctor_name", "fullName"],
+            "Doctor " + (index + 1)
+        );
+
+        const specialty = getValue(
+            doctor,
+            [
+                "specialty",
+                "specialisation",
+                "specialization",
+                "department",
+                "speciality"
+            ],
+            "Medical Professional"
+        );
+
+        const qualifications = getValue(
+            doctor,
+            ["qualifications", "qualification", "degree", "education"],
+            ""
+        );
+
+        const experience = getValue(
+            doctor,
+            ["experience", "yearsOfExperience", "years_experience"],
+            ""
+        );
+
+        const hospital = getValue(
+            doctor,
+            ["hospital", "hospitalName", "clinic", "workplace"],
+            ""
+        );
+
+        const location = getValue(
+            doctor,
+            ["location", "city", "address"],
+            ""
+        );
+
+        const description = getValue(
+            doctor,
+            ["description", "about", "bio"],
+            ""
+        );
+
+        const avatar = document.createElement("div");
+        avatar.className = "doctor-avatar";
+
+        const initials = name
+            .split(/\s+/)
+            .filter(Boolean)
+            .slice(0, 2)
+            .map(part => part.charAt(0).toUpperCase())
+            .join("");
+
+        avatar.textContent = initials || "Dr";
+
+        const imagePath = getValue(
+            doctor,
+            ["image", "imageUrl", "image_url", "photo", "photoUrl"],
+            ""
+        );
+
+        if (imagePath) {
+            const image = document.createElement("img");
+            image.src = imagePath;
+            image.alt = name;
+            image.loading = "lazy";
+
+            image.addEventListener("error", function () {
+                image.remove();
+                avatar.textContent = initials || "Dr";
+            });
+
+            avatar.textContent = "";
+            avatar.appendChild(image);
+        }
+
+        content.appendChild(avatar);
+
+        const heading = document.createElement("h3");
+        heading.textContent = name;
+        content.appendChild(heading);
+
+        addTextElement(content, "specialty", specialty);
+
+        addTextElement(
+            content,
+            "doctor-info",
+            qualifications ? "Qualifications: " + qualifications : ""
+        );
+
+        addTextElement(
+            content,
+            "doctor-info",
+            experience ? "Experience: " + experience : ""
+        );
+
+        addTextElement(
+            content,
+            "doctor-info",
+            hospital ? "Hospital/Clinic: " + hospital : ""
+        );
+
+        addTextElement(
+            content,
+            "doctor-info",
+            location ? "Location: " + location : ""
+        );
+
+        addTextElement(content, "doctor-description", description);
+
+        if (doctor.demo === true || name.startsWith("Demo Doctor")) {
+            const demoLabel = document.createElement("p");
+            demoLabel.className = "demo-label";
+            demoLabel.textContent =
+                "DEMO PROFILE — credentials and availability are not verified.";
+            content.appendChild(demoLabel);
+        }
+
+        const contact = getValue(
+            doctor,
+            ["bookingUrl", "booking_url", "url", "link", "website"],
+            ""
+        );
+
+        const email = getValue(doctor, ["email", "emailAddress"], "");
+        const phone = getValue(
+            doctor,
+            ["phone", "phoneNumber", "telephone"],
+            ""
+        );
+
+        if (contact || email || phone) {
+            const link = document.createElement("a");
+            link.className = "contact-button";
+            link.textContent = "View Contact Options";
+
+            if (contact) {
+                try {
+                    const parsed = new URL(contact, window.location.origin);
+
+                    if (["http:", "https:"].includes(parsed.protocol)) {
+                        link.href = parsed.href;
+                        link.target = "_blank";
+                        link.rel = "noopener noreferrer";
+                    } else {
+                        link.removeAttribute("href");
+                        link.textContent = "Contact details unavailable";
+                        link.classList.add("contact-disabled");
+                    }
+                } catch (error) {
+                    link.removeAttribute("href");
+                    link.textContent = "Contact details unavailable";
+                    link.classList.add("contact-disabled");
+                }
+            } else if (email) {
+                link.href = "mailto:" + email;
+            } else if (phone) {
+                link.href = "tel:" + phone.replace(/[^\d+]/g, "");
+            }
+
+            content.appendChild(link);
+        } else {
+            const label = document.createElement("span");
+            label.className = "contact-button contact-disabled";
+            label.textContent = "Contact details not configured";
+            content.appendChild(label);
+        }
+
+        card.appendChild(content);
+        return card;
+    }
+
+    function renderDoctors() {
+        const doctors = getDoctors();
+        const query = doctorSearch.value.trim().toLowerCase();
+
+        const filteredDoctors = doctors.filter(function (doctor) {
+            const searchableText = [
+                doctor.name,
+                doctor.doctorName,
+                doctor.doctor_name,
+                doctor.specialty,
+                doctor.specialisation,
+                doctor.specialization,
+                doctor.qualifications,
+                doctor.qualification,
+                doctor.hospital,
+                doctor.hospitalName,
+                doctor.location,
+                doctor.description,
+                doctor.experience
+            ]
+                .filter(Boolean)
+                .join(" ")
+                .toLowerCase();
+
+            return searchableText.includes(query);
+        });
+
+        doctorList.replaceChildren();
+
+        filteredDoctors.forEach(function (doctor, index) {
+            doctorList.appendChild(createDoctorCard(doctor, index));
+        });
+
+        doctorCount.textContent =
+            "Showing " + filteredDoctors.length +
+            " of " + doctors.length + " doctor profiles";
+
+        doctorMessage.hidden = filteredDoctors.length !== 0;
+
+        if (filteredDoctors.length === 0) {
+            doctorMessage.textContent =
+                "No matching doctors found. Try another name or specialty.";
+        }
+    }
+
+    doctorSearch.addEventListener("input", renderDoctors);
+
+    // Render after the external doctors.js script has been loaded.
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", renderDoctors);
+    } else {
+        renderDoctors();
+    }
+})();
+</script>
+
+</body>
+</html>
+```

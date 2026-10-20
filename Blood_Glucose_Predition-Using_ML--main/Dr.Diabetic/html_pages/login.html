@@ -1,0 +1,296 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Dr.Diabetic</title>
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+            background:
+                linear-gradient(135deg, rgba(7,35,49,.78), rgba(0,150,136,.58)),
+                url('/img/bg1.avif') center/cover no-repeat fixed;
+            display: flex;
+            flex-direction: column;
+            color: #18313b;
+        }
+
+        header { text-align: center; padding: 25px 15px; }
+
+        .brand {
+            font-family: 'ITC Edwardian Script', 'Brush Script MT', cursive, Arial, sans-serif;
+            font-size: clamp(2.8rem, 6vw, 4rem);
+            color: white;
+            letter-spacing: 1px;
+            text-shadow: 0 3px 12px rgba(0,0,0,.25);
+        }
+
+        .brand-subtitle {
+            color: #e0fffa;
+            font-size: .9rem;
+            margin-top: 5px;
+            letter-spacing: 2px;
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 440px;
+            padding: 38px 35px;
+            background: rgba(255,255,255,.97);
+            border: 1px solid rgba(255,255,255,.5);
+            border-radius: 22px;
+            box-shadow: 0 20px 55px rgba(0,0,0,.22);
+            animation: appear .6s ease;
+        }
+
+        @keyframes appear {
+            from { opacity: 0; transform: translateY(18px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .icon {
+            width: 68px;
+            height: 68px;
+            margin: 0 auto 18px;
+            border-radius: 20px;
+            background: #e0f5f1;
+            color: #008577;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+        }
+
+        h2 {
+            color: #173d48;
+            font-size: 1.7rem;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .description {
+            color: #71818a;
+            text-align: center;
+            font-size: .93rem;
+            line-height: 1.6;
+            margin-bottom: 28px;
+        }
+
+        .input-group { margin-bottom: 20px; }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #344e57;
+            font-size: .9rem;
+            font-weight: 600;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 14px 15px;
+            border: 1px solid #d7e2e5;
+            border-radius: 10px;
+            background: #f9fbfc;
+            color: #18313b;
+            font-size: 1rem;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #009688;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(0,150,136,.12);
+        }
+
+        .password-wrapper { position: relative; }
+
+        .password-wrapper input { padding-right: 65px; }
+
+        .show-password {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            border: none;
+            background: transparent;
+            color: #008577;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: .82rem;
+        }
+
+        .btn {
+            width: 100%;
+            display: block;
+            padding: 14px;
+            margin-top: 8px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #009688, #00796b);
+            color: white;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 18px rgba(0,150,136,.25);
+        }
+
+        .links {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px 18px;
+            margin-top: 24px;
+        }
+
+        .links a {
+            color: #008577;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: .9rem;
+        }
+
+        .links a:hover { color: #005d54; text-decoration: underline; }
+
+        .divider { height: 1px; background: #e8eeee; margin: 24px 0 18px; }
+
+        .security-note {
+            text-align: center;
+            font-size: .8rem;
+            color: #829197;
+            line-height: 1.5;
+        }
+
+        .error {
+            padding: 12px;
+            margin-bottom: 18px;
+            border-radius: 8px;
+            background: #fff0ef;
+            color: #b42318;
+            font-size: .9rem;
+            line-height: 1.5;
+        }
+
+        footer { text-align: center; padding: 18px; color: white; font-size: .85rem; }
+
+        @media (max-width: 480px) {
+            header { padding: 20px 10px; }
+            .container { padding: 30px 22px; border-radius: 18px; }
+            .links { gap: 14px; }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1 class="brand">Dr.Diabetic</h1>
+        <p class="brand-subtitle">SMART DIABETES MANAGEMENT</p>
+    </header>
+
+    <main>
+        <section class="container">
+            <div class="icon" aria-hidden="true">♥</div>
+
+            <h2>Welcome Back</h2>
+            <p class="description">
+                Sign in to access your diabetic management dashboard.
+            </p>
+
+            {% if error %}
+                <p class="error" role="alert">{{ error }}</p>
+            {% endif %}
+
+            <form id="loginForm" method="POST" action="{{ url_for('login') }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+                <div class="input-group">
+                    <label for="username">Username</label>
+                    <input
+                        type="text"
+                        id="username"
+                        name="username"
+                        placeholder="Enter your username"
+                        autocomplete="username"
+                        minlength="3"
+                        maxlength="40"
+                        required
+                    >
+                </div>
+
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <div class="password-wrapper">
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="Enter your password"
+                            autocomplete="current-password"
+                            required
+                        >
+                        <button
+                            type="button"
+                            class="show-password"
+                            id="togglePassword"
+                            aria-label="Show password"
+                        >Show</button>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn">Login →</button>
+            </form>
+
+            <div class="links">
+                <a href="{{ url_for('registration') }}">Create Account</a>
+                <a href="{{ url_for('about') }}">About Us</a>
+                <a href="{{ url_for('homepage') }}">Home</a>
+            </div>
+
+            <div class="divider"></div>
+
+            <p class="security-note">
+                Your health journey matters. Keep your account credentials private.
+            </p>
+        </section>
+    </main>
+
+    <footer>
+        © 2026 Dr.Diabetic · Educational diabetes management prototype
+    </footer>
+
+    <script>
+        const passwordInput = document.getElementById("password");
+        const togglePassword = document.getElementById("togglePassword");
+
+        togglePassword.addEventListener("click", function () {
+            const isHidden = passwordInput.type === "password";
+            passwordInput.type = isHidden ? "text" : "password";
+            togglePassword.textContent = isHidden ? "Hide" : "Show";
+            togglePassword.setAttribute(
+                "aria-label",
+                isHidden ? "Hide password" : "Show password"
+            );
+        });
+
+        // Intentionally no submit preventDefault or fake login alert.
+        // The browser submits the form to Flask using POST.
+    </script>
+</body>
+</html>
